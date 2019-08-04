@@ -15,49 +15,37 @@ PlayState.create = function (params) {
 	this.horizontalHexCount = 6;
 	this.verticalHexCount = 6;
 
-	this.hexCenterColor = [ 1.0, 0.2, 0.1 ];
-	this.hexCornerColor = [ 1.0, 0.2, 1.0 ];
-
 	// create lines to draw hexes
 	this.hexLines = [];
 	for (i = 0; i < this.horizontalHexCount; i++) {
 		for (j = 0; j < this.verticalHexCount; j++) {
+
 			
 			// draw the center hex
 			var hexCenter = Kiwi.Plugins.hex.geometry.hexCenter(
 				new HexCoords( i, j),
 				this.hexSize
 			)
-			var centerCircle = new Kiwi.Plugins.Primitives.Ellipse( {
-				state: this,
-				x: hexCenter.i,
-				y: hexCenter.j,
-				radius: 8,
-				segments: 8,
-				centerOnTransform: true,
-				color: this.hexCenterColor,
-				
-			} );
-			this.addChild( centerCircle );
 			
-			for(n = 0; n < 3; n++){
+			var polyVerts = []
+			
+			for(n = 0; n < 6; n++){
+	
+
 				var hexCorner = Kiwi.Plugins.hex.geometry.hexCorner(
 					hexCenter,
 					this.hexSize,
 					n
 				)
-				var cornerCircle = new Kiwi.Plugins.Primitives.Ellipse( {
-					state: this,
-					x: hexCorner.i,
-					y: hexCorner.j,
-					radius: 4,
-					segments: 8,
-					centerOnTransform: true,
-					color: this.hexCornerColor,
-					
-				} );
-				this.addChild( cornerCircle );	
+				polyVerts.push( [hexCorner.i, hexCorner.j] )
 			}
+			var hexPolygon = new Kiwi.Plugins.Primitives.Polygon( {
+				color: [i/this.horizontalHexCount, j/this.verticalHexCount, 1.0],
+				state: this,
+				indices: [ 0, 1, 2, 0, 3, 4, 0, 5],
+				vertices: polyVerts
+			} );
+			this.addChild( hexPolygon );
 		}
 	}
 	
