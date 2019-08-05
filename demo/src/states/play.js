@@ -16,8 +16,9 @@ PlayState.create = function (params) {
 	this.verticalHexCount = 6;
 
 	// create lines to draw hexes
-	this.hexLines = [];
+	this.hexPolygons = [];
 	for (i = 0; i < this.horizontalHexCount; i++) {
+		this.hexPolygons.push( [] );
 		for (j = 0; j < this.verticalHexCount; j++) {
 
 			
@@ -45,28 +46,18 @@ PlayState.create = function (params) {
 				indices: [ 0, 1, 2, 0, 3, 4, 0, 5],
 				vertices: polyVerts
 			} );
+			this.hexPolygons[i].push( hexPolygon );
 			this.addChild( hexPolygon );
+			hexPolygon.input.enabled = true;
+			var t = hexPolygon.input.onDown.add(
+				function(context) {
+					hexPolygon.input.enabled = true;
+				},
+				new HexCoords( i, j )
+			);
 		}
 	}
 	
-}
-
-// Push a GameObject into a group, and transfer its transforms to the group.
-PlayState.encase = function( entity ) {
-	var group = new Kiwi.Group( this );
-
-	group.addChild( entity );
-	group.x = entity.x;
-	group.y = entity.y;
-	entity.x = 0;
-	entity.y = 0;
-
-	return group;
-};
-
-// called by kiwi in a regular interval
-PlayState.update = function () {
-	//this.draw
 }
 
 // called by kiwi upon mouse/touch events

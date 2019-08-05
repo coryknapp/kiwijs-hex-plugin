@@ -28,7 +28,7 @@ class HexCoords {
 	}
 }
 
-class EuclidianCoords {
+class CartCoords {
 	i: number;
 	j: number;
 	constructor(i: number, j: number) {
@@ -56,7 +56,7 @@ class HexMap<T> {
 Kiwi.Plugins.hex.geometry = {
 
 	hexDimensions:
-		function(size: number) {
+		function(size: number): any {
 			// `size` is side length.  Calculate other dimensions.
 
 			return {
@@ -70,7 +70,7 @@ Kiwi.Plugins.hex.geometry = {
 		},
 	
 	hexCenter:
-		function(coords: HexCoords, size: number){
+		function(coords: HexCoords, size: number): CartCoords {
 
 			var dim = Kiwi.Plugins.hex.geometry.hexDimensions(size);
 
@@ -80,21 +80,22 @@ Kiwi.Plugins.hex.geometry = {
 				jOffset = dim.halfHeight;  
 			}  
 
-			return new EuclidianCoords(
+			return new CartCoords(
 				coords.i * (size * 2 - dim.horizontalDiff) + 80,
 				coords.j * dim.height + 80 + jOffset
 			)
 		},
 
 	hexCorner:
-		function(center: EuclidianCoords, size: number, i: number): EuclidianCoords{
+		function(center: EuclidianCoords, size: number, i: number): CartCoords {
 			var angle_deg = 60 * i;
 			var angle_rad = Math.PI / 180 * angle_deg;
-			return new EuclidianCoords(
+			return new CartCoords(
 				center.i + size * Math.cos(angle_rad),
 				center.j + size * Math.sin(angle_rad)
 			)
 		},
 
+	hexCoordFor
 
 }
