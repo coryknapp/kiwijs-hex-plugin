@@ -8,12 +8,11 @@
 PlayState = new Kiwi.State('PlayState');
 
 PlayState.create = function (params) {
-	console.log("create")
 
 	// set some constants
 	this.hexSize = 36;
-	this.horizontalHexCount = 6;
-	this.verticalHexCount = 6;
+	this.horizontalHexCount = 32;
+	this.verticalHexCount = 32;
 
 	// create lines to draw hexes
 	this.hexPolygons = [];
@@ -48,23 +47,20 @@ PlayState.create = function (params) {
 			} );
 			this.hexPolygons[i].push( hexPolygon );
 			this.addChild( hexPolygon );
-			hexPolygon.input.enabled = true;
-			var t = hexPolygon.input.onDown.add(
-				function(context) {
-					hexPolygon.input.enabled = true;
-				},
-				new HexCoords( i, j )
-			);
 		}
 	}
-	
 }
 
-// called by kiwi upon mouse/touch events
-PlayState.onTap = function (x,y) {	
-	console.log("onTap ", x, ', ', y)
-}
+PlayState.update = function () {
+	Kiwi.State.prototype.update.call( this );
 
-PlayState.draw = function () {
-
+	var hexCoords = Kiwi.Plugins.hex.geometry.hexCoordsForCartCoords(
+		new CartCoords(this.game.input.x, this.game.input.y),
+		this.hexSize
+	);
+	console.log("onTap ", hexCoords.i, hexCoords.j)
+	if( hexCoords.i >= 0 && hexCoords.i < this.horizontalHexCount
+		&& hexCoords.j >= 0 && hexCoords.j < this.verticalHexCount ){
+		this.hexPolygons[hexCoords.i][hexCoords.j].color = [1.0, 0.0, 0.0];
+	}
 }

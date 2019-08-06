@@ -55,6 +55,10 @@ class HexMap<T> {
 //You can also add a new quest object using this function. Please note that if one already exists the previous one will be over-written.
 Kiwi.Plugins.hex.geometry = {
 
+	constants: {
+			
+	},
+
 	hexDimensions:
 		function(size: number): any {
 			// `size` is side length.  Calculate other dimensions.
@@ -74,20 +78,19 @@ Kiwi.Plugins.hex.geometry = {
 
 			var dim = Kiwi.Plugins.hex.geometry.hexDimensions(size);
 
-			
 			var jOffset = 0;
    			if (coords.i % 2 == 1) {
 				jOffset = dim.halfHeight;  
 			}  
 
 			return new CartCoords(
-				coords.i * (size * 2 - dim.horizontalDiff) + 80,
-				coords.j * dim.height + 80 + jOffset
+				coords.i * (size * 2 - dim.horizontalDiff),
+				coords.j * dim.height + jOffset
 			)
 		},
 
 	hexCorner:
-		function(center: EuclidianCoords, size: number, i: number): CartCoords {
+		function(center: CartCoords, size: number, i: number): CartCoords {
 			var angle_deg = 60 * i;
 			var angle_rad = Math.PI / 180 * angle_deg;
 			return new CartCoords(
@@ -96,6 +99,10 @@ Kiwi.Plugins.hex.geometry = {
 			)
 		},
 
-	hexCoordFor
-
+	hexCoordsForCartCoords:
+		function(point: CartCoords, size: number): HexCoords {
+    		var q = ( 2./3 * point.i                        ) / size;
+    		var r = (-1./3 * point.i  +  Math.sqrt(3)/3 * point.j) / size;
+    		return new HexCoords( Math.round(q), Math.round(r) );
+		},
 }
