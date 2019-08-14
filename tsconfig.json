@@ -1,12 +1,14 @@
 {
-    "compilerOptions": {
+	"compilerOptions": {
 		"outFile": "hex-1.0.0.js",
-        "noImplicitAny": true,
-        "removeComments": true,
-        "preserveConstEnums": true,
-    },
-    "files": [
-        "../kiwi.js/build/kiwi.d.ts",
-		"./hex.ts",
-    ]
+		"types": ["../kiwi.js/build/kiwi"],
+		"lib": ["es2015", "dom"],
+		"noImplicitAny": true,
+		"removeComments": true,
+		"preserveConstEnums": true
+	}
+	,
+	"include": [
+		"./hex.ts"
+	]
 }
